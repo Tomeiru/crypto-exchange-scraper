@@ -5,8 +5,8 @@ A crypto exchange scraper with the objective of tracking the evolution of tokens
 ## TODO
 
 - [x] Think about project structure
-- [] Set up AWS Account ([Getting Started with AWS CDK](https://docs.aws.amazon.com/cdk/v2/guide/getting_started.html))
-- [] Set up DynamoDB to keep Tracked Cryptocurrency and their respective historical data
+- [x] Set up AWS Account ([Getting Started with AWS CDK](https://docs.aws.amazon.com/cdk/v2/guide/getting_started.html))
+- [x] Set up DynamoDB tables to keep Tracked Cryptocurrency and their respective historical data
 - [] Set up Lambdas that will act as handlers when a request is received and send back the needed data
 - [] Set up API Gateway to have the different routes up and running
 - [] Set up Scraping Lambda that triggers on CloudWatch Events scheduler
