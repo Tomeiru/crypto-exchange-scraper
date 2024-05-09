@@ -20,7 +20,6 @@ export class CoinMarketCapService {
 
   // TODO: null return replaced to error chaining
   // TODO: Replace axiosRef by Observable handling?
-  // TODO: Think about what happens when a symbol arrives with a comma
   async getSymbolInformation(
     symbol: string,
   ): Promise<SymbolInformation | null> {
