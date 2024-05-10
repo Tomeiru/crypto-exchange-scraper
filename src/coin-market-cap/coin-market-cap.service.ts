@@ -1,8 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { SymbolInformation } from './interfaces/SymbolInformation';
+import { TokenMetadata } from './interfaces/TokenMetadata';
 import { HttpService } from '@nestjs/axios';
-import { CryptocurrenciesInformationBody } from './interfaces/CryptocurrencyInformationBody';
+import { CryptocurrenciesMetadata } from './interfaces/CryptocurrenciesMetadata';
+import { Token } from '../tokens/interface/Token';
+import { CryptocurrenciesMarketQuote } from './interfaces/CryptocurrencyMarketQuote';
+import { TokenQuote } from './interfaces/TokenQuote';
 
 @Injectable()
 export class CoinMarketCapService {
@@ -20,13 +23,11 @@ export class CoinMarketCapService {
 
   // TODO: null return replaced to error chaining
   // TODO: Replace axiosRef by Observable handling?
-  async getSymbolInformation(
-    symbol: string,
-  ): Promise<SymbolInformation | null> {
-    let information: SymbolInformation | null;
+  async getSymbolInformation(symbol: string): Promise<TokenMetadata | null> {
+    let information: TokenMetadata | null;
     try {
       const response =
-        await this.httpService.axiosRef.get<CryptocurrenciesInformationBody>(
+        await this.httpService.axiosRef.get<CryptocurrenciesMetadata>(
           `${this.API_HOSTNAME}cryptocurrency/info`,
           {
             headers: {
@@ -47,5 +48,42 @@ export class CoinMarketCapService {
       information = null;
     }
     return information;
+  }
+
+  // TODO: error chaining instead of returning base value
+  async getCurrenciesLastMarketQuote(tokens: Token[]) {
+    const quotes = new Map<Token, TokenQuote>();
+    const symbols = tokens.map((token) => token.symbol);
+    //const sludge = tokens.map((token) => token.sludge);
+    try {
+      const response =
+        await this.httpService.axiosRef.get<CryptocurrenciesMarketQuote>(
+          `${this.API_HOSTNAME}cryptocurrency/quotes/latest`,
+          {
+            headers: {
+              'X-CMC_PRO_API_KEY': this.API_KEY,
+            },
+            params: {
+              symbol: symbols.join(','),
+            },
+          },
+        );
+      for (const token of tokens) {
+        const tokenData = response.data.data[token.symbol].find((apiToken) => {
+          return apiToken.name === token.name && apiToken.slug === token.slug;
+        });
+        if (!tokenData) {
+          continue;
+        }
+        const quote = tokenData.quote.USD;
+        quotes.set(token, {
+          price: quote.price,
+          percent_change_1h: quote.percent_change_1h,
+        });
+      }
+    } catch (error) {
+      return quotes;
+    }
+    return quotes;
   }
 }
