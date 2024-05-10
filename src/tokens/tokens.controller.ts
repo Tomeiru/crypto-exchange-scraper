@@ -26,7 +26,6 @@ export class TokensController {
     return 'All Tokens';
   }
 
-  // Possible improvement: take into account "slug" in order to accept different cryptos with same token.
   @Post()
   async addTokenToTracked(
     @Body() { symbol }: AddTokenToTrackedDto,
@@ -54,6 +53,8 @@ export class TokensController {
     }
     const newToken = await this.tokenService.addTokenToList(
       tokenInformation.symbol,
+      tokenInformation.slug,
+      tokenInformation.name,
     );
     if (newToken === null) {
       throw new HttpException(

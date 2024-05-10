@@ -1,18 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Token } from '@prisma/client';
+import { Token } from './interface/Token';
 
 //TODO: Change TokensService from returning null to chaining Error for controller to handle
 @Injectable()
 export class TokensService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async addTokenToList(symbol: string): Promise<Token | null> {
+  async addTokenToList(
+    symbol: string,
+    slug: string,
+    name: string,
+  ): Promise<Token | null> {
     let token: Token | null = null;
     try {
       token = await this.prisma.token.create({
         data: {
           symbol: symbol,
+          slug: slug,
+          name: name,
         },
       });
     } catch (e) {
@@ -27,6 +33,10 @@ export class TokensService {
         symbol: symbol,
       },
     });
+  }
+
+  async getTokenList(): Promise<Token[]> {
+    return this.prisma.token.findMany();
   }
 
   async removeTokenFromList(symbol: string) {
