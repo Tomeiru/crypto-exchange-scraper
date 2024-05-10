@@ -1,26 +1,52 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { TokensService } from '../tokens/tokens.service';
+import { Rate } from './interface/Rate';
 
 @Injectable()
 export class RatesService {
-  constructor(
-    private readonly prisma: PrismaService,
-    private readonly tokens: TokensService,
-  ) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   //TODO: Handle errors
-  async addRateToTokens(
-    symbol: string,
+  async addRateToToken(
+    tokenId: string,
     exchangeRateUSD: number,
     evolutionRateLastHour: number,
-  ) {
-    const token = await this.tokens.getTokenFromSymbol(symbol);
+  ): Promise<Rate> {
     return this.prisma.rates.create({
       data: {
-        tokenId: token.id,
+        tokenId: tokenId,
         exchangeRateUSD: exchangeRateUSD,
         evolutionRateLastHour: evolutionRateLastHour,
+      },
+    });
+  }
+
+  async getAllRatesForToken(tokenId: string): Promise<Rate[]> {
+    return this.prisma.rates.findMany({
+      where: {
+        tokenId: tokenId,
+      },
+      orderBy: {
+        recordedTime: 'desc',
+      },
+    });
+  }
+
+  async getMostRecentRateForToken(tokenId: string): Promise<Rate | undefined> {
+    return this.prisma.rates.findFirst({
+      where: {
+        tokenId: tokenId,
+      },
+      orderBy: {
+        recordedTime: 'desc',
+      },
+    });
+  }
+
+  async deleteAllRatesForToken(tokenId: string): Promise<void> {
+    await this.prisma.rates.deleteMany({
+      where: {
+        tokenId: tokenId,
       },
     });
   }

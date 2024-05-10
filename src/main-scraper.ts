@@ -27,7 +27,7 @@ async function bootstrap() {
   const rates = [];
   for (const [token, quote] of quotes) {
     rates.push(
-      await ratesService.addRateToTokens(
+      await ratesService.addRateToToken(
         token.symbol,
         quote.price,
         quote.percent_change_1h,
