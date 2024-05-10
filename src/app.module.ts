@@ -8,6 +8,8 @@ import { CoinMarketCapModule } from './coin-market-cap/coin-market-cap.module';
 import { ConfigModule } from '@nestjs/config';
 import { HttpModule } from '@nestjs/axios';
 import { RatesModule } from './rates/rates.module';
+import { ScrapingModule } from './scraping/scraping.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -17,6 +19,8 @@ import { RatesModule } from './rates/rates.module';
     TokensModule,
     HttpModule,
     RatesModule,
+    ScrapingModule,
+    ScheduleModule.forRoot(),
   ],
   controllers: [AppController, TokensController],
   providers: [AppService],
