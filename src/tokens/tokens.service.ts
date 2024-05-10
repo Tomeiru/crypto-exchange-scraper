@@ -39,17 +39,16 @@ export class TokensService {
     return this.prisma.token.findMany();
   }
 
-  async removeTokenFromList(symbol: string) {
-    let deletedToken: Token | null = null;
+  // TODO: think about error handling
+  async removeTokenFromList(symbol: string): Promise<void> {
     try {
-      deletedToken = await this.prisma.token.delete({
+      await this.prisma.token.delete({
         where: {
           symbol: symbol,
         },
       });
     } catch (e) {
-      return null;
+      throw e;
     }
-    return deletedToken;
   }
 }
