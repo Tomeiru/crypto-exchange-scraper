@@ -14,13 +14,18 @@ datasource db {
 }
 
 model Token {
-  symbol String  @id @unique
+  id     String  @id @default(uuid())
+  symbol String  @unique
+  slug   String
+  name   String
   rates  Rates[]
 }
 
 model Rates {
-  id           Int      @id @default(autoincrement())
-  recordedTime DateTime @default(now())
-  token        Token    @relation(fields: [tokenSymbol], references: [symbol])
-  tokenSymbol  String
+  id                    Int      @id @default(autoincrement())
+  recordedTime          DateTime @default(now())
+  exchangeRateUSD       Float
+  evolutionRateLastHour Float
+  token                 Token    @relation(fields: [tokenId], references: [id])
+  tokenId               String
 }
