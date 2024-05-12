@@ -1,10 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { TokensService } from '../tokens/tokens.service';
 import { CoinMarketCapService } from '../coin-market-cap/coin-market-cap.service';
-import { RatesService } from '../rates/rates.service';
 import { Cron } from '@nestjs/schedule';
 import { Token } from '../tokens/interface/Token';
 import { TokenQuote } from '../coin-market-cap/interfaces/TokenQuote';
+import { RatesService } from '../rates/abstract.rates.service';
 
 @Injectable()
 export class ScrapingService {

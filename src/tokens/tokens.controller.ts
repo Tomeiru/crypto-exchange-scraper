@@ -14,10 +14,10 @@ import { TokensService } from './tokens.service';
 import { Token } from './interface/Token';
 import { CoinMarketCapService } from '../coin-market-cap/coin-market-cap.service';
 import { DetailedTokenResponse } from './interface/DetailedTokenResponse';
-import { RatesService } from '../rates/rates.service';
 import { TokenResponse } from './interface/TokenResponse';
 import { TokenMetadata } from '../coin-market-cap/interfaces/TokenMetadata';
 import { UnknownSymbolError } from '../coin-market-cap/coin-market-cap.errors';
+import { RatesService } from '../rates/abstract.rates.service';
 
 @Controller('tokens')
 export class TokensController {

@@ -1,10 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Rate } from './interface/Rate';
+import { RatesService } from './abstract.rates.service';
 
 @Injectable()
-export class RatesService {
-  constructor(private readonly prisma: PrismaService) {}
+export class PrismaRatesService extends RatesService {
+  constructor(private readonly prisma: PrismaService) {
+    super();
+  }
 
   async addRateToToken(
     tokenId: string,
