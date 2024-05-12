@@ -1,10 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Token } from './interface/Token';
+import { TokensService } from './abstract.tokens.service';
 
 @Injectable()
-export class TokensService {
-  constructor(private readonly prisma: PrismaService) {}
+export class PrismaTokensService extends TokensService {
+  constructor(private readonly prisma: PrismaService) {
+    super();
+  }
 
   async addTokenToList(
     symbol: string,

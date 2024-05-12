@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { TokensService } from '../tokens/tokens.service';
+import { TokensService } from '../tokens/abstract.tokens.service';
 import { CoinMarketCapService } from '../coin-market-cap/coin-market-cap.service';
 import { Cron } from '@nestjs/schedule';
 import { Token } from '../tokens/interface/Token';
