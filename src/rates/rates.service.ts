@@ -6,7 +6,6 @@ import { Rate } from './interface/Rate';
 export class RatesService {
   constructor(private readonly prisma: PrismaService) {}
 
-  //TODO: Handle errors
   async addRateToToken(
     tokenId: string,
     exchangeRateUSD: number,

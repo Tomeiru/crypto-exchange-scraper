@@ -16,6 +16,8 @@ import { CoinMarketCapService } from '../coin-market-cap/coin-market-cap.service
 import { DetailedTokenResponse } from './interface/DetailedTokenResponse';
 import { RatesService } from '../rates/rates.service';
 import { TokenResponse } from './interface/TokenResponse';
+import { TokenMetadata } from '../coin-market-cap/interfaces/TokenMetadata';
+import { UnknownSymbolError } from '../coin-market-cap/coin-market-cap.errors';
 
 @Controller('tokens')
 export class TokensController {
@@ -25,7 +27,6 @@ export class TokensController {
     private readonly ratesService: RatesService,
   ) {}
 
-  // TODO: error handling (500 if any DB request fails)
   @Get()
   async findAll(): Promise<TokenResponse[]> {
     const tokens = await this.tokenService.getTokenList();
@@ -55,32 +56,27 @@ export class TokensController {
         HttpStatus.CONFLICT,
       );
     }
-    const tokenInformation =
-      await this.coinMarketCapService.getSymbolInformation(symbol);
-    if (tokenInformation === null) {
-      throw new HttpException(
-        {
-          status: HttpStatus.BAD_REQUEST,
-          message: ['Symbol does not match to any request'],
-        },
-        HttpStatus.BAD_REQUEST,
-      );
+    let tokenMetadata: TokenMetadata;
+    try {
+      tokenMetadata =
+        await this.coinMarketCapService.getSymbolInformation(symbol);
+    } catch (error) {
+      if (error instanceof UnknownSymbolError) {
+        throw new HttpException(
+          {
+            status: HttpStatus.BAD_REQUEST,
+            message: [`${symbol} does not match any Cryptocurrency`],
+          },
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+      throw error;
     }
-    const newToken = await this.tokenService.addTokenToList(
-      tokenInformation.symbol,
-      tokenInformation.slug,
-      tokenInformation.name,
+    return await this.tokenService.addTokenToList(
+      tokenMetadata.symbol,
+      tokenMetadata.slug,
+      tokenMetadata.name,
     );
-    if (newToken === null) {
-      throw new HttpException(
-        {
-          status: HttpStatus.INTERNAL_SERVER_ERROR,
-          message: ['Could not register the new token for unknown reason'],
-        },
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
-    return newToken;
   }
 
   @Get(':symbol')
