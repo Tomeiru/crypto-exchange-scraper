@@ -10,7 +10,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { AddTokenToTrackedDto } from './dto/add-token-to-tracked.dto';
-import { TokensService } from './tokens.service';
+import { TokensService } from './abstract.tokens.service';
 import { Token } from './interface/Token';
 import { CoinMarketCapService } from '../coin-market-cap/coin-market-cap.service';
 import { DetailedTokenResponse } from './interface/DetailedTokenResponse';

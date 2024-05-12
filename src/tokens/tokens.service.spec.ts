@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { TokensService } from './tokens.service';
+import { TokensService } from './prisma.tokens.service';
 
 describe('TokensService', () => {
   let service: TokensService;
