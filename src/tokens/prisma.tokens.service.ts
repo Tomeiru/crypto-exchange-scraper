@@ -42,4 +42,8 @@ export class PrismaTokensService extends TokensService {
       },
     });
   }
+
+  async removeAllTokens(): Promise<void> {
+    await this.prisma.token.deleteMany();
+  }
 }

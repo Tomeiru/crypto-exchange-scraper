@@ -88,7 +88,7 @@ export class TokensController {
       throw new HttpException(
         {
           status: HttpStatus.NOT_FOUND,
-          message: ['Token not found for symbol'],
+          message: [`Symbol ${symbol} doesn't match to any token`],
         },
         HttpStatus.NOT_FOUND,
       );

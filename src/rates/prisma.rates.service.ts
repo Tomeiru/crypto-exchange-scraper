@@ -52,4 +52,8 @@ export class PrismaRatesService extends RatesService {
       },
     });
   }
+
+  async deleteAllRates(): Promise<void> {
+    await this.prisma.rates.deleteMany();
+  }
 }
