@@ -1,17 +1,17 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { TokensService } from '../tokens/abstract.tokens.service';
-import { CoinMarketCapService } from '../coin-market-cap/coin-market-cap.service';
 import { Cron } from '@nestjs/schedule';
 import { Token } from '../tokens/interface/Token';
-import { TokenQuote } from '../coin-market-cap/interfaces/TokenQuote';
+import { TokenQuote } from '../crypto-data-provider/interfaces/TokenQuote';
 import { RatesService } from '../rates/abstract.rates.service';
+import { CryptoDataProviderService } from '../crypto-data-provider/abstract.crypto-data-provider.service';
 
 @Injectable()
 export class ScrapingService {
   private readonly logger = new Logger(ScrapingService.name);
   constructor(
     private readonly tokenService: TokensService,
-    private readonly coinMarketCapService: CoinMarketCapService,
+    private readonly coinMarketCapService: CryptoDataProviderService,
     private readonly ratesService: RatesService,
   ) {}
 

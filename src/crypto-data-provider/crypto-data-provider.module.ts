@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
-import { CoinMarketCapService } from './coin-market-cap.service';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { HttpModule } from '@nestjs/axios';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { CoinMarketCapService } from './coin-market-cap.service';
+import { CryptoDataProviderService } from './abstract.crypto-data-provider.service';
 
 @Module({
   imports: [
@@ -26,7 +27,12 @@ import { HttpModule } from '@nestjs/axios';
       inject: [ConfigService],
     }),
   ],
-  providers: [CoinMarketCapService],
-  exports: [CoinMarketCapService],
+  providers: [
+    {
+      provide: CryptoDataProviderService,
+      useClass: CoinMarketCapService,
+    },
+  ],
+  exports: [CryptoDataProviderService],
 })
-export class CoinMarketCapModule {}
+export class CryptoDataProviderModule {}

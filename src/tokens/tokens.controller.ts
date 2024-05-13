@@ -12,18 +12,18 @@ import {
 import { AddTokenToTrackedDto } from './dto/add-token-to-tracked.dto';
 import { TokensService } from './abstract.tokens.service';
 import { Token } from './interface/Token';
-import { CoinMarketCapService } from '../coin-market-cap/coin-market-cap.service';
 import { DetailedTokenResponse } from './interface/DetailedTokenResponse';
 import { TokenResponse } from './interface/TokenResponse';
-import { TokenMetadata } from '../coin-market-cap/interfaces/TokenMetadata';
-import { UnknownSymbolError } from '../coin-market-cap/coin-market-cap.errors';
+import { TokenMetadata } from '../crypto-data-provider/interfaces/TokenMetadata';
+import { UnknownSymbolError } from '../crypto-data-provider/crypto-data-provider.errors';
 import { RatesService } from '../rates/abstract.rates.service';
+import { CryptoDataProviderService } from '../crypto-data-provider/abstract.crypto-data-provider.service';
 
 @Controller('tokens')
 export class TokensController {
   constructor(
     private readonly tokenService: TokensService,
-    private readonly coinMarketCapService: CoinMarketCapService,
+    private readonly coinMarketCapService: CryptoDataProviderService,
     private readonly ratesService: RatesService,
   ) {}
 
