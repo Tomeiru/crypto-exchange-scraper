@@ -14,4 +14,6 @@ export abstract class TokensService {
   abstract getTokenList(): Promise<Token[]>;
 
   abstract removeTokenFromList(symbol: string): Promise<void>;
+
+  abstract removeAllTokens(): Promise<void>;
 }

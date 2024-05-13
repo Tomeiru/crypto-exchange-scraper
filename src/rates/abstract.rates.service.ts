@@ -16,4 +16,6 @@ export abstract class RatesService {
   ): Promise<Rate | undefined>;
 
   abstract deleteAllRatesForToken(tokenId: string): Promise<void>;
+
+  abstract deleteAllRates(): Promise<void>;
 }
