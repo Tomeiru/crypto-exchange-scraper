@@ -1,6 +1,4 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { TokensController } from './tokens/tokens.controller';
 import { PrismaModule } from './prisma/prisma.module';
 import { TokensModule } from './tokens/tokens.module';
@@ -23,8 +21,7 @@ import { CryptoDataProviderModule } from './crypto-data-provider/crypto-data-pro
     ScheduleModule.forRoot(),
     CryptoDataProviderModule,
   ],
-  controllers: [AppController, TokensController],
-  providers: [AppService],
+  controllers: [TokensController],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
