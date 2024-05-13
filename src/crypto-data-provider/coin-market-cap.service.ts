@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { DynamicModule, Injectable } from '@nestjs/common';
 import { TokenMetadata } from './interfaces/TokenMetadata';
-import { HttpService } from '@nestjs/axios';
+import { HttpModule, HttpService } from '@nestjs/axios';
 import { CryptocurrenciesMetadata } from './interfaces/CryptocurrenciesMetadata';
 import { Token } from '../tokens/interface/Token';
 import { CryptocurrenciesMarketQuote } from './interfaces/CryptocurrencyMarketQuote';
@@ -8,6 +8,7 @@ import { TokenQuote } from './interfaces/TokenQuote';
 import axios from 'axios';
 import { UnknownSymbolError } from './crypto-data-provider.errors';
 import { CryptoDataProviderService } from './abstract.crypto-data-provider.service';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class CoinMarketCapService extends CryptoDataProviderService {
@@ -71,5 +72,28 @@ export class CoinMarketCapService extends CryptoDataProviderService {
       });
     }
     return quotes;
+  }
+
+  static registerHTTPModule(): DynamicModule {
+    return HttpModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => {
+        const apiKey = configService.get<string>('COIN_MARKET_CAP_API_KEY');
+        if (!apiKey) {
+          throw Error(
+            "can't load CoinMarketCapModule as 'COIN_MARKET_CAP_API_KEY' hasn't been set.",
+          );
+        }
+        return {
+          baseURL: 'https://pro-api.coinmarketcap.com/v2/',
+          headers: {
+            'X-CMC_PRO_API_KEY': configService.get<string>(
+              'COIN_MARKET_CAP_API_KEY',
+            ),
+          },
+        };
+      },
+      inject: [ConfigService],
+    });
   }
 }
