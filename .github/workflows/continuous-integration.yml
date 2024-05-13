@@ -114,3 +114,25 @@ jobs:
       - name: Run tests
         run: npm run test
 
+
+  integration_test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        node: [latest]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+
+      - name: Environment file copy
+        run: cp .env.sample .env
+
+      - name: Build docker compose
+        run: docker compose build
+
+      - name: Migrate database
+        run: docker compose run --entrypoint npx api prisma migrate deploy
+
+      - name: Run Integration tests
+        run: docker compose run -e COIN_MARKET_CAP_API_KEY=${{ secrets.COIN_MARKET_CAP_API_KEY }} --entrypoint npm api run test:e2e
