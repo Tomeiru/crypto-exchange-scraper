@@ -23,8 +23,10 @@ export class ScrapingService {
     let quotes = new Map<Token, TokenQuote>();
     try {
       tokens = await this.tokenService.getTokenList();
-      quotes =
-        await this.coinMarketCapService.getCurrenciesLastMarketQuote(tokens);
+      if (tokens.length !== 0) {
+        quotes =
+          await this.coinMarketCapService.getCurrenciesLastMarketQuote(tokens);
+      }
     } catch (error) {
       this.logger.error(
         `Scraping failed: could not get token list or last market quotes`,
