@@ -6,11 +6,14 @@ import { Token } from '../tokens/interface/Token';
 import { CryptocurrenciesMarketQuote } from './interfaces/CryptocurrencyMarketQuote';
 import { TokenQuote } from './interfaces/TokenQuote';
 import axios from 'axios';
-import { UnknownSymbolError } from './coin-market-cap.errors';
+import { UnknownSymbolError } from './crypto-data-provider.errors';
+import { CryptoDataProviderService } from './abstract.crypto-data-provider.service';
 
 @Injectable()
-export class CoinMarketCapService {
-  constructor(private readonly httpService: HttpService) {}
+export class CoinMarketCapService extends CryptoDataProviderService {
+  constructor(private readonly httpService: HttpService) {
+    super();
+  }
 
   async getSymbolInformation(symbol: string): Promise<TokenMetadata> {
     try {
@@ -40,7 +43,9 @@ export class CoinMarketCapService {
     }
   }
 
-  async getCurrenciesLastMarketQuote(tokens: Token[]) {
+  async getCurrenciesLastMarketQuote(
+    tokens: Token[],
+  ): Promise<Map<Token, TokenQuote>> {
     const quotes = new Map<Token, TokenQuote>();
     const symbols = tokens.map((token) => token.symbol);
     const response =

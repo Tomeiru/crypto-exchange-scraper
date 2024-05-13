@@ -2,12 +2,12 @@ import { Module } from '@nestjs/common';
 import { TokensController } from './tokens.controller';
 import { PrismaTokensService } from './prisma.tokens.service';
 import { PrismaModule } from '../prisma/prisma.module';
-import { CoinMarketCapModule } from '../coin-market-cap/coin-market-cap.module';
 import { RatesModule } from '../rates/rates.module';
 import { TokensService } from './abstract.tokens.service';
+import { CryptoDataProviderModule } from '../crypto-data-provider/crypto-data-provider.module';
 
 @Module({
-  imports: [CoinMarketCapModule, PrismaModule, RatesModule],
+  imports: [CryptoDataProviderModule, PrismaModule, RatesModule],
   controllers: [TokensController],
   providers: [
     {
