@@ -15,7 +15,6 @@ export class ScrapingService {
     private readonly ratesService: RatesService,
   ) {}
 
-  //TODO: batch creation instead of single creation (createMany vs create)?
   @Cron('0 * * * * *')
   async scrape() {
     this.logger.log('Scraping started');
